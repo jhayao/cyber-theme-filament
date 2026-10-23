@@ -12,7 +12,11 @@
         "glassmorphism",
         "theme"
     ],
-    "homepage": "https://github.com/hellozedofficial/cyber-theme-filament",
+    "homepage": "https://github.com/jhayao/cyber-theme-filament",
+    "support": {
+        "issues": "https://github.com/jhayao/cyber-theme-filament/issues",
+        "source": "https://github.com/jhayao/cyber-theme-filament"
+    },
     "license": "MIT",
     "authors": [
         {
@@ -24,14 +28,14 @@
     "require": {
         "php": "^8.2|^8.3",
         "filament/filament": "^3.0|^4.0|^5.0",
-        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "illuminate/contracts": "^10.0|^11.0|^12.0|^13.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0|^10.0",
-        "orchestra/workbench": "^9.0|^10.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "orchestra/workbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.1.0"
     },
     "autoload": {
         "psr-4": {

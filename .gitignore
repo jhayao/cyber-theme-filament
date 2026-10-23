@@ -12,7 +12,6 @@ package-lock.json
 /workbench/.env
 /workbench/database/database.sqlite
 /workbench/storage/
-testbench.yaml
 
 # IDE
 .idea/

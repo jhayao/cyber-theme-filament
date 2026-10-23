@@ -1,0 +1,20 @@
+laravel: '@testbench'
+
+env:
+  # Local preview key only; never use this key in a deployed application.
+  APP_KEY: 'base64:m+yU7/3G1jYwM8bK/y1vO9vX6q7iN0e3hT2uW9eR4bA='
+
+providers:
+  - Workbench\App\Providers\WorkbenchServiceProvider
+  - Workbench\App\Providers\Filament\AdminPanelProvider
+
+migrations:
+  - vendor/orchestra/testbench-core/laravel/migrations
+  - workbench/database/migrations
+
+workbench:
+  start: '/admin'
+  install: true
+  build:
+    - migrate:
+        --force: true

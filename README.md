@@ -1,9 +1,9 @@
 # Cyber Glass Theme for Filament 🪟⚡
 
-An ultra-sleek, futuristic **Cyber Glass & Liquid Glassmorphism** theme and UI plugin for **Filament 5** & **Laravel 11/12**, featuring authentic SVG chromatic dispersion, progressive blur headers, and physics-driven liquid interactions.
+An ultra-sleek, futuristic **Cyber Glass & Liquid Glassmorphism** theme and UI plugin for **Filament 5** & **Laravel 11/12/13**, featuring authentic SVG chromatic dispersion, progressive blur headers, and physics-driven liquid interactions.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/hellozedofficial/cyber-theme-filament.svg?style=flat-square)](https://packagist.org/packages/hellozedofficial/cyber-theme-filament)
-[![Total Downloads](https://img.shields.io/packagist/dt/hellozedofficial/cyber-theme-filament.svg?style=flat-square)](https://packagist.org/packages/hellozedofficial/cyber-theme-filament)
+[![Latest Release](https://img.shields.io/github/v/release/jhayao/cyber-theme-filament?style=flat-square)](https://github.com/jhayao/cyber-theme-filament/releases)
+[![Tests](https://github.com/jhayao/cyber-theme-filament/actions/workflows/tests.yml/badge.svg)](https://github.com/jhayao/cyber-theme-filament/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE.md)
 [![Filament](https://img.shields.io/badge/Filament-v5.0-amber.svg?style=flat-square)](https://filamentphp.com)
 [![PHP](https://img.shields.io/badge/PHP-%5E8.2%20%7C%20%5E8.3-blue.svg?style=flat-square)](https://php.net)
@@ -12,7 +12,7 @@ An ultra-sleek, futuristic **Cyber Glass & Liquid Glassmorphism** theme and UI p
 
 ## Overview
 
-**Cyber Glass** is a next-generation, open-source UI theme and enhancement suite designed exclusively for **Filament 5** and **Laravel 11/12**. Drawing deep inspiration from state-of-the-art fintech platforms like Revolut Business, high-end Apple glassmorphism, and cyberpunk optical aesthetics, Cyber Glass completely transcends conventional dashboard themes by introducing true optical physics and tactile fluidity to your admin panel.
+**Cyber Glass** is a next-generation, open-source UI theme and enhancement suite designed for **Filament 5** and **Laravel 11/12/13**. Drawing deep inspiration from state-of-the-art fintech platforms like Revolut Business, high-end Apple glassmorphism, and cyberpunk optical aesthetics, Cyber Glass completely transcends conventional dashboard themes by introducing true optical physics and tactile fluidity to your admin panel.
 
 Unlike basic backdrop-filter skins that merely tint containers, Cyber Glass features an authentic SVG-powered chromatic dispersion pipeline, specular refraction borders, and multi-layered depth. Every surface—from data tables and metric stat cards to slide-over drawers and dialog modals—radiates luminous refraction while maintaining flawless typographic legibility in both light and dark modes. An ambient cyber mesh aura gently illuminates the canvas background, harmonizing dynamically with your configured Filament primary color palette.
 
@@ -66,29 +66,71 @@ Experience the ultra-clean, high-contrast aesthetics in both Light and Dark mode
 
 ## Requirements
 
-- **PHP**: ^8.2 or ^8.3
-- **Laravel**: ^11.28 or ^12.0
+- **PHP**: 8.2+ (8.3+ for Laravel 13)
+- **Laravel**: ^11.28, ^12.0, or ^13.0
 - **Filament**: ^5.0
+
+The integration test matrix covers Filament 5 on Laravel 11 and 12 with PHP 8.2, and Laravel 13 with PHP 8.3 and 8.5. Composer also permits Laravel 10 and Filament 3/4; these older combinations receive dependency resolution checks rather than full workbench UI coverage.
+
+For Laravel 13, update dependencies to stable releases that explicitly allow Laravel 13, including Filament and `spatie/laravel-package-tools`. Existing lock files may need an update with dependencies (`composer update -W`). Plugin registration and configuration remain the same, including the legacy `LiquidGlassPlugin` alias.
 
 ---
 
 ## Installation
 
-Install the package via Composer:
+Run these commands from an existing Laravel application with a Filament panel installed. To install this fork from [jhayao/cyber-theme-filament](https://github.com/jhayao/cyber-theme-filament), register its GitHub repository with Composer, then require the release:
 
 ```bash
-composer require hellozedofficial/cyber-theme-filament
+composer config repositories.cyber-glass vcs https://github.com/jhayao/cyber-theme-filament
+composer require hellozedofficial/cyber-theme-filament:^1.1 -W
 ```
 
-Optionally publish the configuration file:
+The Composer package name remains `hellozedofficial/cyber-theme-filament` for compatibility with the original package. The VCS repository selects this fork; requiring the package without that repository uses the upstream Packagist package. Commit the updated application `composer.json` and `composer.lock` so deployments install the same fork and version.
+
+Register the plugin in each panel that should use the theme (usually `app/Providers/Filament/AdminPanelProvider.php`):
+
+```php
+use CyberGlass\CyberGlassPlugin;
+use Filament\Panel;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // Keep your panel's existing configuration here.
+        ->plugin(CyberGlassPlugin::make());
+}
+```
+
+The service provider is discovered automatically. Publish the stylesheet and clear cached application configuration:
+
+```bash
+php artisan filament:assets
+php artisan optimize:clear
+```
+
+Open your panel (typically `/admin`) and refresh the browser. No custom Vite build is required for the package's registered stylesheet.
+
+Optionally publish the configuration file to `config/cyber-glass.php`:
 
 ```bash
 php artisan vendor:publish --tag="filament-cyber-glass-config"
 ```
 
+### Updating an existing installation
+
+Add the VCS repository above if switching from the upstream package, then run:
+
+```bash
+composer require hellozedofficial/cyber-theme-filament:^1.1 -W
+php artisan filament:assets
+php artisan optimize:clear
+```
+
+Laravel 13 requires PHP 8.3+ and Laravel 13 compatible Filament dependencies. The existing `CyberGlassPlugin` configuration and `LiquidGlassPlugin` alias continue to work.
+
 ---
 
-##s Usage
+## Usage
 
 Register `CyberGlassPlugin` in your Filament Panel Provider (e.g. `app/Providers/Filament/AdminPanelProvider.php`):
 
@@ -165,6 +207,8 @@ return [
 
 ## Local Development & Testing
 
+The workbench uses Filament 5. Laravel 13 development uses Testbench/Workbench 11 and Pest 4; Laravel 11/12 can continue using Pest 3 and Testbench/Workbench 9/10 respectively.
+
 ```bash
 # Start the live preview testbench server (http://127.0.0.1:8000/admin)
 composer serve
@@ -180,7 +224,9 @@ composer build
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please submit issues and pull requests to [jhayao/cyber-theme-filament](https://github.com/jhayao/cyber-theme-filament).
+
+This is a fork of [hellozedofficial/cyber-theme-filament](https://github.com/hellozedofficial/cyber-theme-filament), originally created by HelloZed.
 
 ---
 

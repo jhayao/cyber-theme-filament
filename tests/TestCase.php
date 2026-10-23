@@ -13,7 +13,6 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Livewire\LivewireServiceProvider;
-use LiquidGlass\LiquidGlassServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
@@ -25,6 +24,8 @@ class TestCase extends Orchestra
 
     protected function getPackageProviders($app): array
     {
+        $composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true, flags: JSON_THROW_ON_ERROR);
+
         return [
             BladeIconsServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
@@ -38,8 +39,7 @@ class TestCase extends Orchestra
             NotificationsServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
-            \CyberGlass\CyberGlassServiceProvider::class,
-            LiquidGlassServiceProvider::class,
+            ...$composer['extra']['laravel']['providers'],
             AdminPanelProvider::class,
         ];
     }
